@@ -1,6 +1,6 @@
 //
 //  TileCoord.swift
-//  APathSearch
+//  AStarPathSearch
 //
 //  Created by wei chen on 2017/10/18.
 //  Copyright © 2017年 wei chen. All rights reserved.
@@ -16,15 +16,15 @@ struct TileCoord {
     var top: TileCoord {
         return TileCoord(column: column, row: row - 1)
     }
-
+    
     var left: TileCoord {
         return TileCoord(column: column - 1, row: row)
     }
-
+    
     var right: TileCoord {
         return TileCoord(column: column + 1, row: row)
     }
-
+    
     var bottom: TileCoord {
         return TileCoord(column: column, row: row + 1)
     }
@@ -39,24 +39,7 @@ extension TileCoord: CustomStringConvertible {
 
 extension TileCoord: Equatable {
     static func ==(lhs: TileCoord, rhs: TileCoord) -> Bool {
-        return lhs.left == rhs.left && lhs.right == rhs.right
+        return lhs.column == rhs.column && lhs.row == rhs.row
     }
 }
-
-// Allow expressions such as let diff = coord1 - coord2
-func -(lhs: TileCoord, rhs: TileCoord) -> TileCoord {
-    return TileCoord(column: lhs.column - rhs.column, row: lhs.row - rhs.row)
-}
-
-
-
-
-
-
-
-
-
-
-
-
 

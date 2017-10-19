@@ -1,6 +1,6 @@
 //
-//  APathSearchUITests.swift
-//  APathSearchUITests
+//  AStarPathSearchUITests.swift
+//  AStarPathSearchUITests
 //
 //  Created by wei chen on 2017/10/18.
 //  Copyright © 2017年 wei chen. All rights reserved.
@@ -8,7 +8,7 @@
 
 import XCTest
 
-class APathSearchUITests: XCTestCase {
+class AStarPathSearchUITests: XCTestCase {
         
     override func setUp() {
         super.setUp()
