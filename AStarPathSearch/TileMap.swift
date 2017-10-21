@@ -11,45 +11,45 @@ import UIKit
 
 class TileMap {
     
-    private var columns: Int {
+    public var columns: Int {
         return tiles.columns
     }
     
-    private var rows: Int {
+    public var rows: Int {
         return tiles.rows
     }
     
-    var tileSize = CGSize(width: 40, height: 40)
+    public var tileSize = CGSize(width: 38, height: 38)
 
-    var tiles = Array2D<TileView>(columns: 9, rows: 8)
+    private var tiles: Array2D<TileView>
 
-    var tilemapSize: CGSize {
+    public var tilemapSize: CGSize {
         return CGSize(width: tileSize.width * CGFloat(tiles.columns),
                       height: tileSize.height * CGFloat(tiles.rows))
     }
     
     init() {
-       generateMap()
-    }
-    
-    func generateMap() {
         //Template Level
         let template =
             [
-                [1, 1, 1, 1, 1, 1, 1, 1, 1],
-                [1, 3, 3, 3, 3, 3, 3, 3, 1],
+                [2, 2, 2, 2, 2, 2, 2, 2, 2],
+                [2, 3, 3, 3, 3, 3, 3, 3, 2],
                 
-                [1, 3, 3, 3, 1, 3, 3, 3, 1],
-                [1, 3, 3, 3, 1, 3, 3, 3, 1],
+                [2, 3, 1, 1, 1, 1, 1, 3, 2],
+                [2, 3, 3, 3, 1, 3, 3, 3, 2],
                 
-                [1, 3, 3, 3, 1, 3, 3, 3, 1],
-                [1, 3, 1, 3, 1, 3, 3, 3, 1],
+                [2, 3, 3, 3, 1, 3, 3, 3, 2],
+                [2, 3, 1, 3, 1, 3, 3, 3, 2],
                 
-                [1, 3, 3, 3, 3, 3, 3, 3, 1],
-                [1, 1, 1, 1, 1, 1, 1, 1, 1],
-
-            ]
+                [2, 3, 3, 3, 1, 3, 3, 3, 2],
+                [2, 2, 2, 2, 2, 2, 2, 2, 2], ]
         
+        tiles = Array2D<TileView>(columns: template.first?.count ?? 0, rows: template.count)
+        generateMap(with: template)
+    }
+    
+    func generateMap(with template: [[Int]]) {
+    
         for (indexr, row) in template.enumerated() {
             for (indexc, cvalue) in row.enumerated() {
                 let tileView = TileView()
@@ -57,11 +57,25 @@ class TileMap {
                 tiles[indexc, indexr] = tileView
             }
         }
-        
     }
     
+    func resetMap() {
+        for i in 0..<rows {
+            for j in 0..<columns {
+                if let tileView = tileView(of: (j, i)) {
+                    tileView.status = .none
+                }
+            }
+        }
+    }
+    
+    // MARK: Helper
     func tileView(of tileCoord: TileCoord) -> TileView? {
         return tiles[tileCoord.column, tileCoord.row]
+    }
+    
+    func tileView(of coord: (column: Int, row: Int)) -> TileView? {
+        return tiles[coord.column, coord.row]
     }
     
     func isValid(tileCoord: TileCoord) -> Bool {

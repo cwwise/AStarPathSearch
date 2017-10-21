@@ -8,44 +8,37 @@
 
 import UIKit
 
-// 墙 或者 路
-enum TileType: Int {
-    case wall
-    case ground
-    
-    init(type: Int) {
-        if type == 1 {
-            self = . wall
-        } else {
-            self = . ground
-        }
-    }
-    
-    // 是否可以到达
-    var isReachable: Bool {
-        return self == .ground
-    }
-}
-
-// 状态 待搜索
-enum TileStatus: Int {
-    // 默认状态
-    case none
-    // 当前搜索
-    case search
-    // 闭合路径
-    case closePath
-    // 开路径
-    case openPath
-    // 最后成功的路径
-    case successPath
-}
+private let textColor = UIColor.darkText
+private let textFont = UIFont.systemFont(ofSize: 12)
 
 class TileView: UIView {
     
+    // h 曼哈顿距离 g到达目前位置花费 f总共
+    var gLabel: UILabel = {
+        let gLabel = UILabel()
+        gLabel.textColor = textColor
+        gLabel.font = textFont
+
+        return gLabel
+    }()
+    
+    var hLabel: UILabel = {
+       let hLabel = UILabel()
+        hLabel.textColor = textColor
+        hLabel.font = textFont
+       return hLabel
+    }()
+    
+    var fLabel: UILabel = {
+        let fLabel = UILabel()
+        fLabel.textColor = textColor
+        fLabel.font = textFont
+        return fLabel
+    }()
+    
+    
     var imageView: UIImageView = {
        let imageView = UIImageView()
-        imageView.image = #imageLiteral(resourceName: "Wall1")
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
@@ -59,7 +52,9 @@ class TileView: UIView {
     
     var status: TileStatus = .none {
         didSet {
-            setupStatus()
+            DispatchQueue.main.async {
+                self.setupStatus()
+            }
         }
     }
     
@@ -75,14 +70,17 @@ class TileView: UIView {
 
     func setup() {
         
-        //self.addSubview(imageView)
-        
+        self.addSubview(gLabel)
+        self.addSubview(hLabel)
+        self.addSubview(fLabel)
+
         let lineColor = UIColor(hex: "#5C6B6C").cgColor
         rightLine.backgroundColor = lineColor
         self.layer.addSublayer(rightLine)
         
         bottomLine.backgroundColor = lineColor
         self.layer.addSublayer(bottomLine)
+        self.addSubview(imageView)
     }
     
     override func layoutSubviews() {
@@ -90,6 +88,23 @@ class TileView: UIView {
         rightLine.frame = CGRect(x: self.bounds.width-linewidth, y: 0, width: linewidth, height: self.bounds.height)
         bottomLine.frame = CGRect(x: 0, y: self.bounds.height-linewidth, width: self.bounds.width, height: linewidth)
         imageView.frame = self.bounds
+        
+        let size = CGSize(width: 15, height: 10)
+        fLabel.frame = CGRect(x: 5, y: 5, width: size.width, height: size.height)
+
+        gLabel.frame = CGRect(x: 5, y: self.bounds.height-5-size.height,
+                              width: size.width, height: size.height)
+        hLabel.frame = CGRect(x: self.bounds.width-size.width, y: self.bounds.height-5-size.height,
+                              width: size.width, height: size.height)
+    }
+    
+    // 设置A*搜索
+    func setPathInfo(_ score:(g: Int, h: Int)) {
+        DispatchQueue.main.async {
+            self.hLabel.text = "\(score.h)"
+            self.gLabel.text = "\(score.g)"
+            self.fLabel.text = "\(score.h+score.g)"
+        }
     }
     
     func setupType() {
@@ -98,11 +113,9 @@ class TileView: UIView {
             
             rightLine.isHidden = false
             bottomLine.isHidden = false
-            imageView.isHidden = true
         } else {
             rightLine.isHidden = true
             bottomLine.isHidden = true
-            imageView.isHidden = false
 
             let lineColor = UIColor(hex: "#767E83")
             self.backgroundColor = lineColor
@@ -110,7 +123,10 @@ class TileView: UIView {
     }
     
     func setupStatus() {
-        var backgroundColor: UIColor?
+        if self.type == .wall {
+            return
+        }
+        var backgroundColor: UIColor
         switch status {
         case .successPath:
             backgroundColor = UIColor(hex: "#E27F77")
@@ -119,7 +135,10 @@ class TileView: UIView {
         case .closePath:
             backgroundColor = UIColor(hex: "#B7CE7F")
         default:
-            break
+            backgroundColor = UIColor.white
+            self.hLabel.text = ""
+            self.gLabel.text = ""
+            self.fLabel.text = ""
         }
         self.backgroundColor = backgroundColor
     }

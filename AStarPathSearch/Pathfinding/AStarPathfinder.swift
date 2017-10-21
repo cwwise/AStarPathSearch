@@ -16,9 +16,8 @@ protocol PathfinderDataSource: class {
 
 /// 搜索过程中的一些触发事件
 protocol PathfinderDelegate: class {
-    func didInsertOpenPath(_ tileCoord: TileCoord)
-    func didInsertClosePath(_ tileCoord: TileCoord)
-
+    func didInsertOpenPath(_ tileCoord: TileCoord, score: (g: Int, h: Int))
+    func didInsertClosePath(_ tileCoord: TileCoord, score: (g: Int, h: Int))
 }
 
 
@@ -42,7 +41,7 @@ class AStarPathfinder {
             
             let currentStep = openSteps.remove(at: 0)
             closedSteps.insert(currentStep)
-            self.delegate?.didInsertClosePath(currentStep.position)
+            self.delegate?.didInsertClosePath(currentStep.position, score: (currentStep.gScore, currentStep.hScore))
             
             // 找到目标位置
             if currentStep.position == toTileCoord {
@@ -85,12 +84,12 @@ class AStarPathfinder {
     private func insert(step: ShortestPathStep, openSteps: inout [ShortestPathStep]) {
         openSteps.append(step)
         // 搜索路径
-        self.delegate?.didInsertOpenPath(step.position)
+        self.delegate?.didInsertOpenPath(step.position, score: (step.gScore, step.hScore))
         // 排序
         openSteps.sort { (left, right) -> Bool in
             // 如果g值一样 则按照运行 来排序 即取最近加入列表的
             if left.fScore == right.fScore {
-//                return left.gScore >= right.gScore
+                return left.gScore >= right.gScore
             }
             return left.fScore < right.fScore
         }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Array2D<T: CustomStringConvertible>: CustomStringConvertible {
+struct Array2D<T> {
     let columns: Int
     let rows: Int
     private var array: Array<T?>
@@ -27,22 +27,5 @@ struct Array2D<T: CustomStringConvertible>: CustomStringConvertible {
             array[row*columns + column] = newValue
         }
     }
-    
-    var description: String {
-        var string = ""
-        for i in 0..<rows {
-            var temp = "["
-            for j in 0..<columns {
-                temp += self[j, i]?.description ?? ""
-                if j != columns - 1 {
-                    temp += ", "
-                }
-            }
-            temp += "],\n"
-            string += temp
-        }
-        return string
-    }
-    
 }
 
