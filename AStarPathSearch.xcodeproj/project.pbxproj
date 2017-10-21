@@ -20,6 +20,8 @@
 		8C1935491F978E8300B94415 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C1935481F978E8300B94415 /* LaunchScreen.storyboard */; };
 		8CBF024A1F98FB8900C6E755 /* UIColor+Hue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBF02491F98FB8900C6E755 /* UIColor+Hue.swift */; };
 		8CC2CC1A1F9B3E570028F3DD /* TileEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC2CC191F9B3E560028F3DD /* TileEnum.swift */; };
+		8CC2CC1C1F9B6AF50028F3DD /* Heap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC2CC1B1F9B6AF50028F3DD /* Heap.swift */; };
+		8CC2CC1E1F9B6AFB0028F3DD /* PriorityQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC2CC1D1F9B6AFB0028F3DD /* PriorityQueue.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +52,8 @@
 		8C1935481F978E8300B94415 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8CBF02491F98FB8900C6E755 /* UIColor+Hue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hue.swift"; sourceTree = "<group>"; };
 		8CC2CC191F9B3E560028F3DD /* TileEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileEnum.swift; sourceTree = "<group>"; };
+		8CC2CC1B1F9B6AF50028F3DD /* Heap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Heap.swift; sourceTree = "<group>"; };
+		8CC2CC1D1F9B6AFB0028F3DD /* PriorityQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriorityQueue.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +123,8 @@
 			isa = PBXGroup;
 			children = (
 				8C19353D1F9788EF00B94415 /* AStarPathfinder.swift */,
+				8CC2CC1D1F9B6AFB0028F3DD /* PriorityQueue.swift */,
+				8CC2CC1B1F9B6AF50028F3DD /* Heap.swift */,
 			);
 			path = Pathfinding;
 			sourceTree = "<group>";
@@ -245,10 +251,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C1935431F978AA600B94415 /* TileMap.swift in Sources */,
+				8CC2CC1C1F9B6AF50028F3DD /* Heap.swift in Sources */,
 				8C1935471F978C4200B94415 /* TileView.swift in Sources */,
 				8CC2CC1A1F9B3E570028F3DD /* TileEnum.swift in Sources */,
 				8C1935451F978AE300B94415 /* Array2D.swift in Sources */,
 				8C19353E1F9788EF00B94415 /* AStarPathfinder.swift in Sources */,
+				8CC2CC1E1F9B6AFB0028F3DD /* PriorityQueue.swift in Sources */,
 				8C19351F1F97883C00B94415 /* ViewController.swift in Sources */,
 				8C19351D1F97883C00B94415 /* AppDelegate.swift in Sources */,
 				8CBF024A1F98FB8900C6E755 /* UIColor+Hue.swift in Sources */,

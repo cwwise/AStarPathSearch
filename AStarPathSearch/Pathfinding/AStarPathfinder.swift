@@ -35,11 +35,18 @@ class AStarPathfinder {
         
         var closedSteps = Set<ShortestPathStep>()
         // 可以替换为最小堆
-        var openSteps = [ShortestPathStep(position: fromTileCoord)]
+        var openSteps = PriorityQueue<ShortestPathStep> { (left, right) -> Bool in
+            // 如果g值一样 则按照运行 来排序 即取最近加入列表的
+            if left.fScore == right.fScore {
+                return left.gScore >= right.gScore
+            }
+            return left.fScore < right.fScore
+        }
+        openSteps.enqueue(ShortestPathStep(position: fromTileCoord))
         
         while openSteps.isEmpty == false {
             
-            let currentStep = openSteps.remove(at: 0)
+            guard let currentStep = openSteps.dequeue() else { return nil }
             closedSteps.insert(currentStep)
             self.delegate?.didInsertClosePath(currentStep.position, score: (currentStep.gScore, currentStep.hScore))
             
@@ -61,17 +68,17 @@ class AStarPathfinder {
                 // 计算移动的花费
                 let moveCost = dataSource.costToMove(from: currentStep.position, toAdjacentTileCoord: step.position)
                 // 如果包含在 待比较路径中
-                if let existingIndex = openSteps.index(of: step) {
+                if openSteps.contains(step) {
                     // 比较是否为最短路径 如果为更短位置
                     if currentStep.gScore + moveCost < step.gScore {
                         step.set(parent: currentStep, with: moveCost)
-                        openSteps.remove(at: existingIndex)
-                        insert(step: step, openSteps: &openSteps)
                     }
                 } else {
-                    step.set(parent: currentStep, with: moveCost)
                     step.hScore = hScore(from: step.position, toCoord: toTileCoord)
-                    insert(step: step, openSteps: &openSteps)
+                    step.set(parent: currentStep, with: moveCost)
+                    openSteps.enqueue(step)
+                    //
+                    self.delegate?.didInsertOpenPath(step.position, score: (step.gScore, step.hScore))
                 }
             }
             
@@ -79,21 +86,7 @@ class AStarPathfinder {
         
         return nil
     }
-    
-    //
-    private func insert(step: ShortestPathStep, openSteps: inout [ShortestPathStep]) {
-        openSteps.append(step)
-        // 搜索路径
-        self.delegate?.didInsertOpenPath(step.position, score: (step.gScore, step.hScore))
-        // 排序
-        openSteps.sort { (left, right) -> Bool in
-            // 如果g值一样 则按照运行 来排序 即取最近加入列表的
-            if left.fScore == right.fScore {
-                return left.gScore >= right.gScore
-            }
-            return left.fScore < right.fScore
-        }
-    }
+
     
     // 转换为路径
     func convertSteps(to lastStep: ShortestPathStep) -> [TileCoord] {
@@ -131,9 +124,6 @@ class ShortestPathStep: Hashable {
     }
     
     func set(parent: ShortestPathStep, with moveCost: Int) {
-        if self.parent != nil {
-            print("找到更好的路径")
-        }
         self.parent = parent
         self.gScore = parent.gScore + moveCost
     }
