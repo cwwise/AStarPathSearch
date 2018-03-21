@@ -20,7 +20,6 @@ protocol PathfinderDelegate: class {
     func didInsertClosePath(_ tileCoord: TileCoord, score: (g: Int, h: Int))
 }
 
-
 class AStarPathfinder {
     
     weak var dataSource: PathfinderDataSource?
